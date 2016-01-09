@@ -13,6 +13,16 @@ source_file='/var/log/messages'
 
 data = open(source_file)
 
+def log_regex(data, regex):
+    pattern = re.compile(regex)
+    groups = (pattern.match(line) for line in data)
+    return (g.groups() for g in groups if g)
+    
+# Return a recursive list of all files in a directory    
+def oswalk_example(path="."):
+    matches = (x for x in os.walk(path) if x[2] )
+    return ( '/'.join([x[0],y]) for x in matches for y in x[2] )
+
 def log_sources(data):
     logpats=r'\<(\S+)\>(\S+ * \S+ \S*) (\S+) ([a-zA-Z]+)[\.\[\]0-9]*:* (.*)'
     logpat=re.compile(logpats)
